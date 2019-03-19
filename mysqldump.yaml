@@ -1,0 +1,28 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: mysqldump2
+spec:
+  template:
+    spec:
+      containers:
+        - name: mysqldump
+          image: registry.fit2cloud.com/operator/mysqldump:1.0
+          env:
+            - name: DB_HOST
+              value: 172.20.1.59
+            - name: DB_USER
+              value: root
+            - name: DB_PASS
+              value: fit2cloud.com
+            - name: DB_BACKUP_NAME
+              value: "20191213"
+          imagePullPolicy: Always
+          volumeMounts:
+            - mountPath: /mysqldump
+              name: mysqldump
+      volumes:
+          - name: mysqldump
+            hostPath:
+              path: /home/core/mysqldump
+      restartPolicy: OnFailure
